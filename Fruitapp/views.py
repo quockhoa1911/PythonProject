@@ -34,13 +34,13 @@ class FruitsViewset(viewsets.ModelViewSet):
         serializer = FruitsSerializer(instance=instance)
         return Response(data=serializer.data)
 
-    #action -> check_permiss start -> call get_permiss(get_permiss call permission_sclasses return permission)-> permission.has_permiss()
+    #action -> check_permiss() start -> call get_permiss(get_permiss call permission_sclasses return permission)-> permission.has_permiss()
     @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated], name='Add')
     def Add(self, request, *args, **kwargs):
         username = request.user.username
         user = Account.objects.get(username=username)
         if user.role.name in self.check_permiss.check_permissdb:
-            serializer = FruitsSerializer(data=request.POST)
+            serializer = FruitsSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(status=status.HTTP_201_CREATED)
@@ -55,7 +55,7 @@ class FruitsViewset(viewsets.ModelViewSet):
         user = Account.objects.get(username=username)
         if user.role.name in self.check_permiss.check_permissdb:
             instance = Fruits.objects.get(pk=pk)
-            serializer = FruitsSerializer(instance=instance, data=request.POST)
+            serializer = FruitsSerializer(instance=instance, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(status=status.HTTP_200_OK)
