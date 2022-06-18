@@ -5,6 +5,7 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from Fruitapp.models import Fruits
 from rest_framework.permissions import IsAuthenticated
+from Fruitapp.serializer import FruitsSerializer
 # Create your views here.
 
 
@@ -24,7 +25,7 @@ class BillViewDetail(RetrieveAPIView):
         Dt = DetailBill.objects.filter(bill=bill)
         ls = []
         for i in Dt:
-            ls.append([i.fruit.name, i.fruit.price*i.weight])
+            ls.append({"idFruits":FruitsSerializer(instance = i.fruit).data,"price":i.weight*i.fruit.price})
         serializer.data['ListFruits'].clear()
         serializer.data['ListFruits'].append(ls)
         return Response(serializer.data)
