@@ -23,9 +23,8 @@ class BillViewDetail(RetrieveAPIView):
         bill = Bill.objects.get(pk=id)
         serializer = BillSerializer(instance=bill)
         Dt = DetailBill.objects.filter(bill=bill)
-        ls = []
-        for i in Dt:
-            ls.append({"idFruits":FruitsSerializer(instance = i.fruit).data,"price":i.weight*i.fruit.price})
         serializer.data['ListFruits'].clear()
-        serializer.data['ListFruits'].append(ls)
+        for i in Dt:
+            serializer.data['ListFruits'].append({"idFruits": FruitsSerializer(
+                instance=i.fruit).data, "price": i.weight*i.fruit.price})
         return Response(serializer.data)
