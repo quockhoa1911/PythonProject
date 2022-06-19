@@ -34,7 +34,6 @@ class FruitsViewset(viewsets.ModelViewSet):
         serializer = FruitsSerializer(instance=instance)
         return Response(data=serializer.data)
 
-    #action -> check_permiss() start -> call get_permiss(get_permiss call permission_sclasses return permission)-> permission.has_permiss()
     @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated], name='Add')
     def Add(self, request, *args, **kwargs):
         username = request.user.username
